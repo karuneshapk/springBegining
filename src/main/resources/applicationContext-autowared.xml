@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:p="http://www.springframework.org/schema/p" xmlns:contexts="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
+    <contexts:component-scan
+            base-package="pojosAutowared"/>
+    <!--<contexts:annotation-config></contexts:annotation-config>-->
+
+    <bean id="person" class="pojosAutowared.Person"
+          p:id="1" p:age="10" p:name="Niki" p:surname="Lauda"/>
+
+    <bean id="address" class="pojosAutowared.Address"
+          p:street="Mira">
+        <qualifier value="address"/>
+    </bean>
+
+       <bean class="pojosAutowared.Company"
+          p:street="CompanyStreet">
+        <qualifier value="company"/>
+    </bean>
+
+    <bean id="notifier" class="pojosAutowared.Notifier"/>
+    <aop:config>
+        <aop:aspect id="note" ref="notifier">
+            <aop:pointcut id="advice" expression="execution(* *.getStreet(..))"/>
+            <aop:before pointcut-ref="advice" method="notifyBefore"/>
+            <aop:after pointcut-ref="advice" method="notifyAfter"/>
+        </aop:aspect>
+    </aop:config>
+
+</beans>

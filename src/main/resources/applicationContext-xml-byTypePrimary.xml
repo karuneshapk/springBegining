@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:aop="http://www.springframework.org/schema/aop"
+       xmlns:p="http://www.springframework.org/schema/p" xmlns:contexts="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
+
+
+    <bean id="person" class="pojosByNameByType.Person"
+          p:id="1" p:age="10" p:name="Niki" p:surname="Lauda" autowire="byType"/>
+
+    <bean id="address" class="pojosByNameByType.Address" primary="true"
+          p:street="Mira"/>
+    
+    <bean id="addressImpl" class="pojosByNameByType.AddressImpl"
+          p:street="MiraImpl"/>
+
+    <bean id="notifier" class="pojosByNameByType.Notifier"/>
+    <aop:config>
+        <aop:aspect id="note" ref="notifier">
+            <aop:pointcut id="advice" expression="execution(* *.getStreet(..))"/>
+            <aop:before pointcut-ref="advice" method="notifyBefore"/>
+            <aop:after pointcut-ref="advice" method="notifyAfter"/>
+        </aop:aspect>
+    </aop:config>
+
+</beans>
